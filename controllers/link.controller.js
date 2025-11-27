@@ -1,5 +1,4 @@
 const Link = require('../models/link.model');
-const { nanoid } = require('nanoid');
 
 const createLink = async (req, res) => {
   const { originalUrl, customCode } = req.body;
@@ -9,6 +8,7 @@ const createLink = async (req, res) => {
   }
 
   try {
+    const { nanoid } = await import('nanoid');
     let shortCode = customCode;
 
     if (shortCode) {
@@ -20,11 +20,7 @@ const createLink = async (req, res) => {
       shortCode = nanoid(7);
     }
 
-    const newLink = new Link({
-      originalUrl,
-      shortCode,
-    });
-
+    const newLink = new Link({ originalUrl, shortCode });
     await newLink.save();
     res.status(201).json(newLink);
   } catch (error) {
